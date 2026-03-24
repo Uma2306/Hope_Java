@@ -1,4 +1,4 @@
-Leetcode 3232 : https://leetcode.com/problems/remove-element/
+Leetcode 27 : https://leetcode.com/problems/remove-element/
 class Solution {
     public int removeElement(int[] nums, int val) {
         int i=0;
