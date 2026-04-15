@@ -1,4 +1,5 @@
-import java.util.*
+import java.util.*;
+
 class Advertiser {
     private int id;
     private String name;
@@ -21,7 +22,6 @@ class Advertiser {
     }
 }
 
-
 class Admin extends Advertiser {
     public Admin(int id, String name) {
         super(id, name);
@@ -36,7 +36,7 @@ class Admin extends Advertiser {
 abstract class Advertisement {
     protected int adId;
     protected String title;
-    protected String body; 
+    protected String body;
     protected Advertiser advertiser;
     protected boolean isActive;
 
@@ -63,7 +63,6 @@ abstract class Advertisement {
     public abstract void displayAd();
 }
 
-
 class BannerAd extends Advertisement {
 
     public BannerAd(int adId, String title, String body, Advertiser advertiser) {
@@ -75,7 +74,7 @@ class BannerAd extends Advertisement {
         System.out.println("\n----- Advertisement -----");
         System.out.println("Ad ID      : " + adId);
         System.out.println("Title      : " + title);
-        System.out.println("Body       : " + body); // DISPLAY BODY
+        System.out.println("Body       : " + body);
         System.out.println("Advertiser : " + advertiser.getName());
         System.out.println("Status     : " + (isActive ? "Active" : "Inactive"));
         System.out.println("--------------------------");
@@ -83,34 +82,35 @@ class BannerAd extends Advertisement {
 }
 
 class AdManager {
-    private ArrayList<Advertiser> advertisers = new ArrayList<>();
-    private ArrayList<Advertisement> ads = new ArrayList<>();
+
+    private Map<Integer, Advertiser> advertisers = new HashMap<>();
+    private Map<Integer, Advertisement> ads = new HashMap<>();
 
     public void addAdvertiser(Advertiser a) {
-        advertisers.add(a);
+        advertisers.put(a.getId(), a);
         System.out.println("Advertiser added.");
     }
+
     public void viewAdvertisers() {
         if (advertisers.isEmpty()) {
             System.out.println("No advertisers.");
             return;
         }
-        for (Advertiser a : advertisers) {
+
+        for (Advertiser a : advertisers.values()) {
             a.display();
         }
     }
 
     public Advertiser findAdvertiser(int id) {
-        for (Advertiser a : advertisers) {
-            if (a.getId() == id) return a;
-        }
-        return null;
+        return advertisers.get(id);
     }
 
     public void addAd(Advertisement ad) {
-        ads.add(ad);
+        ads.put(ad.getAdId(), ad);
         System.out.println("Ad added.");
     }
+
     public void viewAds(String type) {
         if (ads.isEmpty()) {
             System.out.println("No ads available.");
@@ -119,15 +119,15 @@ class AdManager {
 
         boolean found = false;
 
-        for (Advertisement ad : ads) {
+        for (Advertisement ad : ads.values()) {
             if (type.equalsIgnoreCase("all")) {
                 ad.displayAd();
                 found = true;
-            } 
+            }
             else if (type.equalsIgnoreCase("active") && ad.isActive()) {
                 ad.displayAd();
                 found = true;
-            } 
+            }
             else if (type.equalsIgnoreCase("inactive") && !ad.isActive()) {
                 ad.displayAd();
                 found = true;
@@ -139,19 +139,12 @@ class AdManager {
         }
     }
 
-  
     public Advertisement findAd(int id) {
-        for (Advertisement ad : ads) {
-            if (ad.getAdId() == id) return ad;
-        }
-        return null;
+        return ads.get(id);
     }
 
-
     public void deleteAd(int id) {
-        Advertisement ad = findAd(id);
-        if (ad != null) {
-            ads.remove(ad);
+        if (ads.remove(id) != null) {
             System.out.println("Ad deleted.");
         } else {
             System.out.println("Ad not found.");
